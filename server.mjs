@@ -44,6 +44,6 @@ const server = createServer(async (request, response) => {
 });
 
 const port = Number(process.env.PORT ?? 5057);
-server.listen(port, "127.0.0.1", () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`Mini Toko Online berjalan di http://localhost:${port}`);
 });

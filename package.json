@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
+    "build": "node scripts/build.mjs",
     "test:once": "node --test tests/*.test.mjs",
     "lint": "biome lint public/app.js src/cart.js",
     "format:check": "biome format public/app.js src/cart.js",

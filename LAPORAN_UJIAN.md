@@ -69,3 +69,16 @@
 ## F. Refleksi singkat
 - Satu pelajaran paling penting dari ujian ini:
   Pentingnya melakukan debugging berbasis bukti nyata (menggunakan browser DevTools, linter, dan automated testing) alih-alih menebak-nebak, serta pentingnya menjaga konsistensi penamaan atribut (seperti class HTML dan rute API) antara backend dan frontend.
+
+## G. Persiapan deployment
+- Platform yang dipilih: Vercel, dengan konfigurasi situs statis.
+- Repository GitHub: `https://github.com/gilangramdhani/wst-ust-mini-toko`
+- Branch deployment: `main`.
+- Konfigurasi project Vercel:
+  - Framework Preset: `Other`.
+  - Build Command: `npm run build`.
+  - Output Directory: `dist`.
+  - Install Command: `npm install`.
+- Data katalog untuk deployment statis disediakan di `public/products.json` dan dimuat oleh `public/app.js`. Script `npm run build` menyalin halaman, data produk, serta modul keranjang ke `dist`. `server.mjs` tetap digunakan untuk menjalankan aplikasi secara lokal.
+- Pengujian persiapan: `npm run test:once` lulus (7/7), `npm run lint` lulus, dan `npm run build` berhasil menghasilkan folder `dist`.
+- Status deployment: belum dilakukan. Isi URL deployment Vercel setelah proses deploy berhasil.
