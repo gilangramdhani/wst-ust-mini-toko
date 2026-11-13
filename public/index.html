@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Toko Online - UTS Web Software Tools</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">W</span><span>WebTools<span class="muted"> Mart</span></span></div>
+      <span class="class-tag">STUDI KASUS UTS</span>
+    </header>
+    <main class="shell">
+      <section class="welcome">
+        <div class="eyebrow">MINI TOKO ONLINE</div>
+        <h1>Belanja sederhana, debugging sungguhan.</h1>
+        <p>Sebuah aplikasi latihan yang perlu diperiksa agar seluruh fungsi berjalan dengan benar.</p>
+      </section>
+      <div class="columns">
+        <section class="catalog">
+          <div class="section-head"><h2>Daftar Produk</h2><span id="product-status">Sedang memuat...</span></div>
+          <div id="products" class="product-grid" aria-live="polite"></div>
+        </section>
+        <aside class="cart-panel">
+          <div class="section-head"><h2>Keranjang</h2><span id="cart-count">0 barang</span></div>
+          <div id="cart-items" class="cart-items"><p>Belum ada barang.</p></div>
+          <div class="total"><span>Total belanja</span><strong id="total">Rp0</strong></div>
+          <button id="clear-cart" class="reset-btn" type="button">Kosongkan keranjang</button>
+        </aside>
+      </div>
+      <footer class="footer">Web Software Tools • Ujian Tengah Semester</footer>
+    </main>
+  </body>
+</html>

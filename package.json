@@ -1,0 +1,19 @@
+{
+  "name": "wst-uts-mini-toko",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "test:once": "node --test tests/*.test.mjs",
+    "lint": "biome lint public/app.js src/cart.js",
+    "format:check": "biome format public/app.js src/cart.js",
+    "quality:check": "biome check public/app.js src/cart.js"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
