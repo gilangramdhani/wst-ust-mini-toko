@@ -79,7 +79,7 @@
   - Build Command: `npm run build`.
   - Output Directory: `dist`.
   - Install Command: `npm install`.
-- Konfigurasi build dan folder output juga ditetapkan secara eksplisit di `vercel.json` agar Vercel menyajikan isi `dist` sebagai situs statis, bukan menjalankan `app.js` sebagai function.
+- Framework preset `Other`, build command, dan folder output ditetapkan secara eksplisit di `vercel.json` agar Vercel menyajikan isi `dist` sebagai situs statis, bukan menjalankan `app.js` sebagai function.
 - Data katalog untuk deployment statis disediakan di `public/products.json` dan dimuat oleh `public/app.js`. Script `npm run build` menyalin halaman, data produk, serta modul keranjang ke `dist`. `server.mjs` tetap digunakan untuk menjalankan aplikasi secara lokal.
 - Pengujian persiapan: `npm run test:once` lulus (7/7), `npm run lint` lulus, dan `npm run build` berhasil menghasilkan folder `dist`.
 - Status deployment: build Vercel berhasil, tetapi URL deployment sempat menampilkan `500 FUNCTION_INVOCATION_FAILED`. Konfigurasi eksplisit ditambahkan; push perubahan dan verifikasi ulang URL masih diperlukan.
