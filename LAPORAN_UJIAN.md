@@ -33,7 +33,7 @@
   - `npm run quality:check`: Berhasil lulus 100% tanpa error maupun warning.
 
 ## D. Git
-- Branch (jika membuat): `master`
+- Branch (jika membuat): `main`
 - Ringkasan commit:
   - `001e43c chore: initial exam` : Commit inisialisasi awal proyek sebelum perubahan kode.
   - `84a50ce fix: repair shop behavior` : Commit perbaikan rute API produk, selector tombol keranjang, dan perhitungan total belanja beserta formatting.
