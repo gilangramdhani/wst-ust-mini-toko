@@ -37,10 +37,12 @@
 - Ringkasan commit:
   - `001e43c chore: initial exam` : Commit inisialisasi awal proyek sebelum perubahan kode.
   - `84a50ce fix: repair shop behavior` : Commit perbaikan rute API produk, selector tombol keranjang, dan perhitungan total belanja beserta formatting.
-  - `31d18e0 docs: complete LAPORAN_UJIAN.md and change documentation` : Commit laporan pemeriksaan ujian dan catatan perubahan detail.
+  - `c74140a docs: complete LAPORAN_UJIAN.md and change documentation` : Commit laporan pemeriksaan ujian dan catatan perubahan detail.
+  - `18ab8cb docs: set main branch in report` : Penyesuaian nama branch utama ke main.
 - Hasil pemeriksaan `git log --oneline`:
   ```
-  31d18e0 docs: complete LAPORAN_UJIAN.md and change documentation
+  18ab8cb docs: set main branch in report
+  c74140a docs: complete LAPORAN_UJIAN.md and change documentation
   84a50ce fix: repair shop behavior
   001e43c chore: initial exam
   ```
