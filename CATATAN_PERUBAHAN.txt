@@ -1,0 +1,179 @@
+================================================================================
+CATATAN PERUBAHAN & PENJELASAN PERBAIKAN MINI TOKO ONLINE
+Mata Kuliah: Web Software Tools (UTS)
+================================================================================
+
+Dokumen ini berisi dokumentasi detail mengenai seluruh berkas yang diubah,
+alasan kesalahan (akar masalah), cara perbaikan, dan cara mengujinya
+agar mahasiswa memahami alur pengerjaan secara mendalam.
+
+--------------------------------------------------------------------------------
+1. RINGKASAN MASALAH DAN FILE YANG DIPERBAIKI
+--------------------------------------------------------------------------------
+Ada 3 masalah utama yang diperbaiki pada proyek ini:
+  - Masalah 1: Daftar produk gagal dimuat dari server
+    File: public/app.js (baris 48 -> baris 62 setelah formatting)
+  - Masalah 2: Tombol "+ Tambah ke Keranjang" tidak bereaksi saat diklik
+    File: public/app.js (baris 27 -> baris 34 setelah formatting)
+  - Masalah 3: Perhitungan total belanja salah saat barang memiliki kuantitas > 1
+    File: src/cart.js (baris 3-4 -> baris 3-6 setelah formatting)
+  - Masalah Kualitas Kode: Variabel tak terpakai & kerapian format kode (Biome)
+    File: src/cart.js & public/app.js
+
+*Catatan Integritas Pengujian:*
+Folder `tests/` (khususnya `tests/cart.test.mjs`) SAMA SEKALI TIDAK DIUBAH
+sesuai instruksi soal ujian nomor 2.
+
+
+--------------------------------------------------------------------------------
+2. RINCIAN PERUBAHAN PER FILE
+--------------------------------------------------------------------------------
+
+--------------------------------------------------
+A. BERKAS: src/cart.js
+--------------------------------------------------
+Fungsi: Mengelola logika keranjang belanja dan perhitungan total harga.
+
+[SEBELUM PERBAIKAN]:
+```javascript
+export function calculateTotal(cart) {
+  var discount = 0;
+  return cart.reduce((total, item) => total + item.price, 0);
+}
+```
+
+[PENYEBAB MASALAH]:
+1. Logika Perhitungan: Pada `cart.reduce`, rumus yang dipakai adalah `total + item.price`.
+   Rumus ini hanya menjumlahkan harga satuan produk tanpa mengalikan dengan jumlah
+   kuantitas (`item.quantity`). Misalnya beli 2 mouse (@ Rp75.000), total yang
+   dihitung tetap Rp75.000, bukan Rp150.000.
+2. Kualitas Kode: Terdapat deklarasi `var discount = 0;` yang tidak pernah
+   digunakan sama sekali. Hal ini menyebabkan peringatan linting Biome:
+   `noUnusedVariables`.
+
+[SETELAH PERBAIKAN]:
+```javascript
+export function calculateTotal(cart) {
+  return cart.reduce(
+    (total, item) => total + item.price * (item.quantity ?? 1),
+    0,
+  );
+}
+```
+
+[PENJELASAN PERBAIKAN]:
+- Menghapus variabel `var discount = 0;` sehingga bersih dari lint warning.
+- Mengalikan harga produk dengan kuantitas: `item.price * (item.quantity ?? 1)`.
+  Operator `?? 1` (nullish coalescing) memastikan jika properti `quantity` belum terdefinisi,
+  nilai default kuantitas yang dipakai adalah 1.
+- Menjalankan format Biome agar sesuai panduan kode proyek.
+
+
+--------------------------------------------------
+B. BERKAS: public/app.js
+--------------------------------------------------
+Fungsi: Antarmuka interaksi browser (frontend client-side script).
+
+PERBAIKAN 1: Rute Fetch Produk (Masalah 1)
+[SEBELUM]:
+```javascript
+async function loadProducts() {
+  try {
+    const response = await fetch("/api/barang");
+    ...
+```
+[PENYEBAB]:
+Ketika browser meminta data produk ke `/api/barang`, server lokal (`server.mjs`)
+mengembalikan status HTTP 404 Not Found karena rute API yang terdaftar di
+`server.mjs` (baris 16) adalah `/api/products`. Akibatnya masuk ke blok `catch`
+dan menampilkan pesan "Gagal memuat produk".
+
+[SETELAH]:
+```javascript
+async function loadProducts() {
+  try {
+    const response = await fetch("/api/products");
+    ...
+```
+[PENJELASAN PERBAIKAN]:
+Mengubah URL fetch menjadi `/api/products` agar selaras dengan endpoint yang
+disediakan oleh server. Data JSON berupa 4 produk berhasil diterima dan dirender.
+
+
+PERBAIKAN 2: Selektor Tombol Keranjang (Masalah 2)
+[SEBELUM]:
+```javascript
+document.querySelectorAll(".add-to-cart").forEach((button) => {
+  button.addEventListener("click", () => {
+    ...
+```
+[PENYEBAB]:
+Pada template pembuatan tombol (baris 24), tombol dibuat dengan class `add-button`:
+`<button class="add-button" data-id="${product.id}" type="button">+ Tambah ke Keranjang</button>`
+Namun saat menambahkan event listener, kode mencari elemen dengan class `.add-to-cart`.
+Karena tidak ada elemen dengan class `.add-to-cart` di DOM, `querySelectorAll`
+menghasilkan NodeList kosong (0 elemen). Akibatnya tidak ada tombol yang memiliki
+event listener click!
+
+[SETELAH]:
+```javascript
+document.querySelectorAll(".add-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    ...
+```
+[PENJELASAN PERBAIKAN]:
+Menyamakan nama selektor class menjadi `.add-button`, sesuai dengan class tombol
+pada HTML dan style CSS di `public/style.css`. Dengan demikian, setiap tombol produk
+kini memiliki event listener dan dapat memasukkan barang ke keranjang saat diklik.
+
+
+--------------------------------------------------------------------------------
+3. BUKTI PEMERIKSAAN DAN HASIL PENGUJIAN
+--------------------------------------------------------------------------------
+
+1. Pengujian Otomatis (Automated Testing)
+   Perintah: `npm run test:once`
+   - Sebelum perbaikan:
+     5 lolos (pass), 2 gagal (fail) dari 7 pengujian.
+     Test yang gagal:
+       ✖ satu jenis barang dengan jumlah dua (actual 75000, expected 150000)
+       ✖ dua jenis barang dengan jumlah berbeda (actual 225000, expected 600000)
+   - Setelah perbaikan:
+     ✔ keranjang kosong memiliki total nol
+     ✔ satu barang dengan jumlah satu
+     ✔ dua jenis barang dengan jumlah satu
+     ✔ satu jenis barang dengan jumlah dua
+     ✔ dua jenis barang dengan jumlah berbeda
+     ✔ menambahkan produk baru ke keranjang kosong
+     ✔ menambahkan produk yang sama menambah jumlah, bukan baris
+     Hasil akhir: 7 pass, 0 fail (100% SUKSES).
+
+2. Pemeriksaan Kualitas & Format Kode (Biome)
+   - `npm run lint`         -> 0 warning, 0 error (Checked 2 files)
+   - `npm run format:check` -> 0 error (Semua file terformat rapi)
+   - `npm run quality:check`-> 0 error, 0 warning (Semua aturan terpenuhi)
+
+
+--------------------------------------------------------------------------------
+4. RIWAYAT COMMIT GIT
+--------------------------------------------------------------------------------
+Sesuai instruksi soal, proses pencatatan dilakukan dengan Git:
+- Commit 1 (Kondisi Awal):
+  `001e43c chore: initial exam`
+- Commit 2 (Perbaikan Masalah & Format):
+  `84a50ce fix: repair shop behavior`
+
+
+--------------------------------------------------------------------------------
+5. CARA MENJALANKAN APLIKASI
+--------------------------------------------------------------------------------
+1. Menjalankan Server Lokal:
+   npm run dev
+   Lalu buka browser di: http://localhost:5057
+
+2. Menjalankan Tes Otomatis:
+   npm run test:once
+
+3. Menjalankan Pemeriksaan Kualitas Kode:
+   npm run quality:check
+================================================================================
